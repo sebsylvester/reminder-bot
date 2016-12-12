@@ -37,8 +37,10 @@ By default, the Skype and Web Chat channels are already configured when register
 
 Setting up the FB Messenger channel involves a daunting number of steps. Fortunately, the Dev Portal does a good job at keeping things clear and gives a good overview of all the steps, and much of them are illustrated with screenshots.
 
-The bot needs to be either deployed to a cloud service like Heroku, or must be running locally and connected made accessible to the outside world with [ngrok](https://ngrok.com/).
-Setting up ngrok is easy. Once installed run '''ngrok http 3978''' from the command line and copy the secure URL (https). From the Developer Portal, configure your bot's Messaging Endpoint with the ngrok URL. **NOTE:** you must add **/api/messages** to the URL. This is your bot's endpoint which receives all incoming messages.
+The bot needs to be either deployed to a cloud service like Heroku, or kept running locally while made accessible to the outside world via [ngrok](https://ngrok.com/).
+After installing ngrok, run '''ngrok http 3978''' from the command line and copy the secure URL (https). Use the Developer Portal to configure your bot's Messaging Endpoint with the ngrok URL. **NOTE:** you must add **/api/messages** to the URL. This is your bot's endpoint which receives all incoming messages.
+
+If you deployed the bot to a cloud service, than perform the same steps but with your cloud app's URL instead.
 
 ### Known issue with FB Messenger for Android
 I've tested the bot on Messenger's iOS, web and Android clients, and the latter seems to have an issue with the 'typing' indicator. After receiving the message from the bot, it doesn't disappear. I expect this to be a a bug in the Android client, rather than my code or the SDK's' for that matter.
