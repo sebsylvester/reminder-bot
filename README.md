@@ -43,4 +43,4 @@ After installing ngrok, run '''ngrok http 3978''' from the command line and copy
 If you deployed the bot to a cloud service, than perform the same steps but with your cloud app's URL instead.
 
 ### Known issue with FB Messenger for Android
-I've tested the bot on Messenger's iOS, web and Android clients, and the latter seems to have an issue with the 'typing' indicator. After receiving the message from the bot, it doesn't disappear. I expect this to be a a bug in the Android client, rather than my code or the SDK's' for that matter.
+I've tested the bot on Messenger's iOS, web and Android clients, and the latter seems to have an issue with the 'typing' indicator. After receiving the message from the bot, it doesn't disappear. I expect this to be a a bug in the Android client, rather than my code or the SDK's for that matter. If anyone knows how to resolve this issue, please let me know (@sebsylvester)
