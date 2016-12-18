@@ -3,7 +3,7 @@ const consts = require('../helpers/consts');
 const Reminder = require('../models/reminder');
 
 /**
- *
+ * Returns a function that queries MongoDB for expired reminders, sends notifications and cleans up the database.
  * @param bot {UniversalBot}
  * @returns {Function}
  */
