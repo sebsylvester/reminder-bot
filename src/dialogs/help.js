@@ -2,8 +2,11 @@ const builder = require('botbuilder');
 const consts = require('../helpers/consts');
 const helpMenu = consts.Menus.help;
 
-module.exports = [
+// This dialog will present the buttons as Quick Replies in Facebook Messenger
+// https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies
+const dialog = [
     (session) => {
+        // In case you need Quick Reply buttons
         builder.Prompts.choice(session,
             consts.Prompts.HELP,
             // Extract the titles from the help menu, they will be used as button labels
@@ -24,3 +27,16 @@ module.exports = [
         session.beginDialog(helpMenu[index].dialogId);
     }
 ];
+
+// This dialog will create a Button Template in Facebook Messenger
+// https://developers.facebook.com/docs/messenger-platform/send-api-reference/button-template
+module.exports = (session) => {
+    const card = new builder.ThumbnailCard(session)
+        .buttons(consts.Menus.help.map(el => builder.CardAction.imBack(session, el.title, el.title)));
+
+    const message = new builder.Message(session)
+        .text(consts.Prompts.HELP)
+        .addAttachment(card);
+
+    session.endDialog(message);
+};
