@@ -19,7 +19,7 @@ module.exports = (session) => {
                 return new builder.ThumbnailCard(session)
                     .title(reminder.value)
                     .subtitle(utils.convertTimestamp(reminder.expiration, timeZoneId))
-                    .buttons([ builder.CardAction.dialogAction(session, 'deleteReminder', reminder.id, 'Delete reminder') ])
+                    .buttons([ builder.CardAction.dialogAction(session, 'deleteReminder', reminder.id, 'Delete reminder') ]);
             });
 
             message = new builder.Message(session)
