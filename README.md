@@ -33,7 +33,7 @@ $ npm start
 * Connect the emulator
 
 ## Using the bot with Facebook Messenger
-By default, the Skype and Web Chat channels are already configured when registering a new bot. However, I noticed that the Skype client does not yet support all the features used by the bot.
+By default, the Skype and Web Chat channels are already configured when registering a new bot. However, I noticed that the Skype client for Android does not yet support all the features used by the bot.
 
 Setting up the FB Messenger channel involves a number of steps. Fortunately, the Dev Portal gives a number screenshots to guide you through them.
 
