@@ -19,7 +19,7 @@ module.exports = [
         }
 
         // Cache received arguments
-        dialogData.reminder = reminder[0].value;
+        dialogData.reminder = reminder.entity;
         dialogData.datetime = datetime ? utils.processDatetimeEntity(datetime) : null;
         dialogData.message = message;
 
