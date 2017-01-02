@@ -2,12 +2,9 @@ const { IntentDialog, DialogAction, EntityRecognizer } = require('botbuilder');
 const consts = require('../helpers/consts');
 const config = require('../../config');
 const utils = require('../helpers/utils');
-const WitRecognizer = require('botbuilder-wit');
+const { witRecognizer } = require('../helpers/witRecognizer');
 
-// Create intentDialog with WitRecognizer
-const recognizer = new WitRecognizer(process.env.WIT_ACCESS_TOKEN || config.WIT_ACCESS_TOKEN);
-
-module.exports = new IntentDialog({ recognizers: [recognizer] })
+module.exports = new IntentDialog({ recognizers: [witRecognizer] })
     .matches('set_timezone', DialogAction.beginDialog('/setTimezone'))
     .matches('show_reminders', DialogAction.beginDialog('/showReminders'))
     .matches('show_timezone', DialogAction.beginDialog('/showTimezone'))

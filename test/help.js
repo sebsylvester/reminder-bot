@@ -31,136 +31,51 @@ describe('dialog /help', function () {
         connector.processMessage('help');
     });
 
-    it('should begin /showReminders when tapping the "See my reminders"', function (done) {
+    it('should begin /showTimezone when tapping the "Show timezone"', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
-        bot.beginDialogAction('help', '/help', { matches: /^help/i });
-        bot.dialog('/help', require('../src/dialogs/help'));
+        consts.Menus.help.forEach(function (item) {
+            var name = item.dialogId.slice(1);
+            bot.beginDialogAction(name, item.dialogId, { matches: new RegExp('^' + item.title + '$', 'i') });
+        });
+        bot.dialog('/showTimezone', function (session) {
+            expect(session.sessionState.callstack[0].id).to.equal('*:/showTimezone');
+            done();
+        });
+
+        connector.processMessage('Show timezone');
+    });
+
+    it('should begin /showReminders when tapping the "Show reminders"', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+
+        consts.Menus.help.forEach(function (item) {
+            var name = item.dialogId.slice(1);
+            bot.beginDialogAction(name, item.dialogId, { matches: new RegExp('^' + item.title + '$', 'i') });
+        });
         bot.dialog('/showReminders', function (session) {
-            expect(session.sessionState.callstack[0].id).to.equal('*:/help');
-            expect(session.sessionState.callstack[1].id).to.equal('*:/showReminders');
+            expect(session.sessionState.callstack[0].id).to.equal('*:/showReminders');
             done();
         });
 
-        bot.on('send', function () {
-            connector.processMessage('See my reminders');
-        });
-
-        connector.processMessage('help');
+        connector.processMessage('Show reminders');
     });
 
-    it('should begin /setTimezone when tapping the "Reset my timezone"', function (done) {
+    it('should begin /setTimezone when tapping the "Reset timezone"', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
-        bot.beginDialogAction('help', '/help', { matches: /^help/i });
-        bot.dialog('/help', require('../src/dialogs/help'));
+        consts.Menus.help.forEach(function (item) {
+            var name = item.dialogId.slice(1);
+            bot.beginDialogAction(name, item.dialogId, { matches: new RegExp('^' + item.title + '$', 'i') });
+        });
         bot.dialog('/setTimezone', function (session) {
-            expect(session.sessionState.callstack[0].id).to.equal('*:/help');
-            expect(session.sessionState.callstack[1].id).to.equal('*:/setTimezone');
+            expect(session.sessionState.callstack[0].id).to.equal('*:/setTimezone');
             done();
         });
 
-        bot.on('send', function () {
-            connector.processMessage('Reset my timezone');
-        });
-
-        connector.processMessage('help');
-    });
-
-    it('should reprompt when typing an invalid value', function (done) {
-        const connector = new builder.ConsoleConnector();
-        const bot = new builder.UniversalBot(connector);
-        var step = 0;
-
-        // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
-        sinon.stub(witClient, 'message', () => {
-            const response = {
-                "_text": "foo",
-                "entities": {
-                    "greeting": [
-                        {
-                            "confidence": 0.7237044579338374,
-                            "start": 0,
-                            "end": 3,
-                            "body": "foo",
-                            "value": {
-                                "value": "foo"
-                            },
-                            "entity": "greeting"
-                        }
-                    ]
-                }
-            };
-            return Promise.resolve(response);
-        });
-
-        bot.beginDialogAction('help', '/help', { matches: /^help/i });
-        bot.dialog('/help', require('../src/dialogs/help'));
-
-        bot.on('send', function (message) {
-            switch (++step) {
-                case 1:
-                    connector.processMessage('foo');
-                    break;
-                case 2:
-                    expect(message.text).to.equal(consts.Prompts.LIST_RETRY);
-                    witClient.message.restore();
-                    done();
-                    break;
-            }
-        });
-
-        connector.processMessage('help');
-    });
-
-    it('should cancel when typing "cancel"', function (done) {
-        const connector = new builder.ConsoleConnector();
-        const bot = new builder.UniversalBot(connector);
-        var step = 0;
-
-        bot.beginDialogAction('help', '/help', { matches: /^help/i });
-        bot.dialog('/help', require('../src/dialogs/help'))
-            .cancelAction('cancelSetTimezone', consts.Messages.CANCEL_HELP, { matches: /^(cancel|nevermind)/i });;
-
-        bot.on('send', function (message) {
-            switch (++step) {
-                case 1:
-                    connector.processMessage('cancel');
-                    break;
-                case 2:
-                    expect(message.text).to.equal(consts.Messages.CANCEL_HELP);
-                    done();
-                    break;
-            }
-        });
-
-        connector.processMessage('help');
-    });
-
-    it('should cancel when typing "nevermind"', function (done) {
-        const connector = new builder.ConsoleConnector();
-        const bot = new builder.UniversalBot(connector);
-        var step = 0;
-
-        bot.beginDialogAction('help', '/help', { matches: /^help/i });
-        bot.dialog('/help', require('../src/dialogs/help'))
-            .cancelAction('cancelSetTimezone', consts.Messages.CANCEL_HELP, { matches: /^(cancel|nevermind)/i });;
-
-        bot.on('send', function (message) {
-            switch (++step) {
-                case 1:
-                    connector.processMessage('nevermind');
-                    break;
-                case 2:
-                    expect(message.text).to.equal(consts.Messages.CANCEL_HELP);
-                    done();
-                    break;
-            }
-        });
-
-        connector.processMessage('help');
+        connector.processMessage('Reset timezone');
     });
 });

@@ -41,7 +41,7 @@ describe('dialog /setDatetime', function () {
         var step = 0;
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
+        const { witClient } = require('../src/helpers/witRecognizer');
         sinon.stub(witClient, 'message', () => {
             const response = {
                 "_text": "foo",
@@ -104,7 +104,7 @@ describe('dialog /setDatetime', function () {
         };
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
+        const { witClient } = require('../src/helpers/witRecognizer');
         sinon.stub(witClient, 'message', () => Promise.resolve(response));
 
         bot.dialog('/', [

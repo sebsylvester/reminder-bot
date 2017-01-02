@@ -59,8 +59,7 @@ bot.dialog('/setDatetime', require('./dialogs/setDatetime'));
 bot.dialog('/setTimezone', require('./dialogs/setTimezone'));
 bot.dialog('/showTimezone', require('./dialogs/showTimezone'));
 bot.dialog('/showReminders', require('./dialogs/showReminders'));
-bot.dialog('/help', require('./dialogs/help'))
-    .cancelAction('cancelSetTimezone', consts.Messages.CANCEL_HELP, { matches: /^(cancel|nevermind)/i });
+bot.dialog('/help', require('./dialogs/help'));
 
 //=========================================================
 // Server Setup

@@ -1,6 +1,6 @@
 # reminder-bot
 
-This is a clone of the [Hello Jarvis](https://facebook.com/helloimjarvis/) Facebook Messenger bot, built with the [Microsoft Bot Framework](https://dev.botframework.com/) and [Wit.ai](https://wit.ai) for language processing. It has the the exact same functionality and it required just 600 lines of code to implement.
+This is a clone of the [Hello Jarvis](https://facebook.com/helloimjarvis/) Facebook Messenger bot, built with the [Microsoft Bot Framework](https://dev.botframework.com/) and [Wit.ai](https://wit.ai) for language processing. It has the exact same functionality and it required just 600 lines of code to implement.
 
 ## Prerequisites
 There are a number of things you'll need to do before running the bot:
@@ -35,12 +35,9 @@ $ npm start
 ## Using the bot with Facebook Messenger
 By default, the Skype and Web Chat channels are already configured when registering a new bot. However, I noticed that the Skype client does not yet support all the features used by the bot.
 
-Setting up the FB Messenger channel involves a daunting number of steps. Fortunately, the Dev Portal does a good job at keeping things clear and gives a good overview of all the steps, and much of them are illustrated with screenshots.
+Setting up the FB Messenger channel involves a number of steps. Fortunately, the Dev Portal gives a number screenshots to guide you through them.
 
 The bot needs to be either deployed to a cloud service like Heroku, or kept running locally while made accessible to the outside world via [ngrok](https://ngrok.com/).
 After installing ngrok, run '''ngrok http 3978''' from the command line and copy the secure URL (https). Use the Developer Portal to configure your bot's Messaging Endpoint with the ngrok URL. **NOTE:** you must add **/api/messages** to the URL. This is your bot's endpoint which receives all incoming messages.
 
 If you deployed the bot to a cloud service, than perform the same steps but with your cloud app's URL instead.
-
-### Known issue with FB Messenger for Android
-I've tested the bot on Messenger's iOS, web and Android clients, and the latter seems to have an issue with the 'typing' indicator. After receiving the message from the bot, it doesn't disappear. This issue is already [documented](https://github.com/Microsoft/BotBuilder/issues/1434).

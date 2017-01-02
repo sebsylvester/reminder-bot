@@ -96,7 +96,7 @@ describe('dialog /setTimezone', function () {
         const bot = new builder.UniversalBot(connector);
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
+        const { witClient } = require('../src/helpers/witRecognizer');
         sinon.stub(witClient, 'message', () => {
             const response = {
                 "_text": "Change timezone",
@@ -133,7 +133,7 @@ describe('dialog /setTimezone', function () {
         const bot = new builder.UniversalBot(connector);
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
+        const { witClient } = require('../src/helpers/witRecognizer');
         sinon.stub(witClient, 'message', () => {
             const response = {
                 "_text": "Change timezone",

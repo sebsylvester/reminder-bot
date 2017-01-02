@@ -6,11 +6,12 @@ const helpMenu = consts.Menus.help;
 // https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies
 const dialog = [
     (session) => {
+        console.log('help dialog: send prompt');
         // In case you need Quick Reply buttons
         builder.Prompts.choice(session,
             consts.Prompts.HELP,
             // Extract the titles from the help menu, they will be used as button labels
-            consts.Menus.help.map(el => el.title),
+            consts.Menus.help.map(el => 'foo'),
             // Options
             {
                 listStyle: builder.ListStyle.button,
@@ -20,7 +21,7 @@ const dialog = [
     },
     (session, results) => {
         const index = results.response && results.response.index;
-        if(typeof index === 'undefined') {
+        if (typeof index === 'undefined') {
             return session.endDialog();
         }
 
@@ -38,5 +39,6 @@ module.exports = (session) => {
         .text(consts.Prompts.HELP)
         .addAttachment(card);
 
+    // The bot's global action handlers will intercept the tapped button event
     session.endDialog(message);
 };
