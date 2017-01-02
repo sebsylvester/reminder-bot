@@ -1,6 +1,6 @@
 {
   "name": "reminder-bot",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A clone of the 'Hello Jarvis' Facebook Messenger bot, built with Microsoft Bot Framework and Wit.ai.",
   "main": "lib/app.js",
   "repository": {
@@ -15,17 +15,18 @@
   "keywords": [
     "Microsoft Bot Framework",
     "botbuilder",
+    "botbuilder-wit",
     "chatbot",
-    "bots",
-    "witai",
-    "Hello Jarvis clone"
+    "bot",
+    "wit.ai",
+    "Hello Jarvis"
   ],
   "author": "Sebastian Sylvester",
   "license": "MIT",
   "dependencies": {
     "@google/maps": "^0.3.0",
     "botbuilder": "^3.4.4",
-    "botbuilder-wit": "^1.0.1",
+    "botbuilder-wit": "^1.0.2",
     "chance": "^1.0.4",
     "moment-timezone": "^0.5.9",
     "mongoose": "^4.7.3",

@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
 const consts = require('../src/helpers/consts');
+const { witClient } = require('../src/helpers/witRecognizer');
 
 describe('dialog /', function () {
     it('should respond to a greeting', function (done) {
@@ -10,7 +11,6 @@ describe('dialog /', function () {
         const botResponse = new RegExp('^(' + consts.Messages.GREETINGS.join('|') + ') Try something like: .+, or type "help"\.');
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
         sinon.stub(witClient, 'message', () => {
             const witResponse = {
                 "_text" : "Hello",
@@ -42,7 +42,6 @@ describe('dialog /', function () {
         const bot = new builder.UniversalBot(connector);
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        const witClient = require('../src/api_clients/witClient');
         sinon.stub(witClient, 'message', () => {
             const response = {
                 "_text": "What's the weather tomorrow?",

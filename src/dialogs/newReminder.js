@@ -1,6 +1,6 @@
 const consts = require('../helpers/consts');
 const utils = require('../helpers/utils');
-const witClient = require('../api_clients/witClient');
+const { witClient } = require('../helpers/witRecognizer');
 const moment = require('moment-timezone');
 const Reminder = require('../models/reminder');
 
@@ -10,17 +10,24 @@ module.exports = [
         const { dialogData, userData } = session;
 
         // dialog should not run without reminder argument
-        if(!reminder) {
+        if (!reminder) {
             return session.error(new Error('Invalid arguments object: reminder property is undefined'));
         }
         // dialog should not run without message argument
-        if(!message) {
+        if (!message) {
             return session.error(new Error('Invalid arguments object: message property is undefined'));
         }
 
-        // Cache received arguments
+        // Cache entities and message
+        if (datetime) {
+            const { type, value, from } = datetime.rawEntity;
+            // The type is either "value" or "interval".
+            // If it's an interval, there are "from" and "to" properties to read a value from.
+            dialogData.datetime = type === 'value' ? value : from.value;
+        } else {
+            dialogData.datetime = null;
+        }
         dialogData.reminder = reminder.entity;
-        dialogData.datetime = datetime ? utils.processDatetimeEntity(datetime) : null;
         dialogData.message = message;
 
         // Prompt the user to set a timezone in case this has not been set upon the first run
