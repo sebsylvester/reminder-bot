@@ -71,11 +71,10 @@ exports.convertTimestamp = (datetime, timezone) => {
  * @returns {String}
  */
 exports.processDatetimeEntity = (datetime) => {
-    if (!Array.isArray(datetime) || datetime.length === 0) {
-        throw new Error('Invalid argument: datetime must be an array');
+    if (!datetime || !datetime.rawEntity) {
+        throw new Error('Invalid datetime entity');
     }
-    // There is always a type property that equals eiter 'value' or 'interval'
-    const { type } =  datetime[0];
-    // If type is inteval the datetime object has 'from' and 'to' properties
-    return type === 'value' ? datetime[0].value : datetime[0].from.value;
+    const { type, value, from } = datetime.rawEntity;
+    // The type is either "value" or "interval".
+    return type === 'value' ? value : from.value;
 };

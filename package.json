@@ -14,8 +14,10 @@
   },
   "keywords": [
     "Microsoft Bot Framework",
-    "BotBuilder SDK",
+    "botbuilder",
     "chatbot",
+    "bots",
+    "witai",
     "Hello Jarvis clone"
   ],
   "author": "Sebastian Sylvester",
@@ -23,6 +25,7 @@
   "dependencies": {
     "@google/maps": "^0.3.0",
     "botbuilder": "^3.4.4",
+    "botbuilder-wit": "^1.0.1",
     "chance": "^1.0.4",
     "moment-timezone": "^0.5.9",
     "mongoose": "^4.7.3",
