@@ -6,7 +6,6 @@ const helpMenu = consts.Menus.help;
 // https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies
 const dialog = [
     (session) => {
-        console.log('help dialog: send prompt');
         // In case you need Quick Reply buttons
         builder.Prompts.choice(session,
             consts.Prompts.HELP,
