@@ -39,12 +39,12 @@ bot.use(builder.Middleware.sendTyping());
 // Bots Global Actions
 //=========================================================
 
-bot.beginDialogAction('help', '/help', { matches: /^help/i });
 // Make help menu buttons global actions so that they work regardless of the state of the dialog stack
 consts.Menus.help.forEach(item => {
     const name = item.dialogId.slice(1);
     bot.beginDialogAction(name, item.dialogId, { matches: new RegExp('^' + item.title + '$', 'i')});
 });
+// Triggered upon tapping the delete button of a ThumbnailCard in the showReminders dialog
 bot.beginDialogAction('deleteReminder', '/deleteReminder');
 
 //=========================================================
@@ -59,7 +59,7 @@ bot.dialog('/setDatetime', require('./dialogs/setDatetime'));
 bot.dialog('/setTimezone', require('./dialogs/setTimezone'));
 bot.dialog('/showTimezone', require('./dialogs/showTimezone'));
 bot.dialog('/showReminders', require('./dialogs/showReminders'));
-bot.dialog('/help', require('./dialogs/help'));
+bot.dialog('/help', require('./dialogs/help')).triggerAction({ matches: /^help/i });
 
 //=========================================================
 // Server Setup
