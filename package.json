@@ -31,8 +31,7 @@
     "moment-timezone": "^0.5.11",
     "mongoose": "^4.7.6",
     "node-wit": "^4.1.0",
-    "restify": "^4.2.0",
-    "sinon": "^1.17.7"
+    "restify": "^4.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -40,7 +39,6 @@
     "babel-preset-latest": "^6.16.0",
     "chai": "^3.5.0",
     "mocha": "^3.1.2",
-    "sinon": "^1.17.6",
-    "sloc": "^0.1.11"
+    "sinon": "^1.17.6"
   }
 }
