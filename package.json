@@ -25,13 +25,14 @@
   "license": "MIT",
   "dependencies": {
     "@google/maps": "^0.3.0",
-    "botbuilder": "^3.4.4",
-    "botbuilder-wit": "^1.0.2",
+    "botbuilder": "^3.5.1",
+    "botbuilder-wit": "^1.0.4",
     "chance": "^1.0.4",
-    "moment-timezone": "^0.5.9",
-    "mongoose": "^4.7.3",
+    "moment-timezone": "^0.5.11",
+    "mongoose": "^4.7.6",
     "node-wit": "^4.1.0",
-    "restify": "^4.2.0"
+    "restify": "^4.2.0",
+    "sinon": "^1.17.7"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
