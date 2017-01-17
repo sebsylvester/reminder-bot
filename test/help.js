@@ -31,7 +31,7 @@ describe('dialog /help', function () {
         connector.processMessage('help');
     });
 
-    it('should begin /showTimezone when tapping the "Show timezone"', function (done) {
+    it('should begin /showTimezone when tapping "Show timezone"', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
@@ -47,7 +47,7 @@ describe('dialog /help', function () {
         connector.processMessage('Show timezone');
     });
 
-    it('should begin /showReminders when tapping the "Show reminders"', function (done) {
+    it('should begin /showReminders when tapping "Show reminders"', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
@@ -63,7 +63,7 @@ describe('dialog /help', function () {
         connector.processMessage('Show reminders');
     });
 
-    it('should begin /setTimezone when tapping the "Reset timezone"', function (done) {
+    it('should begin /setTimezone when tapping "Reset timezone"', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
