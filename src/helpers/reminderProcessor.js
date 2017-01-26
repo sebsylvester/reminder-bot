@@ -27,7 +27,7 @@ module.exports = (bot) => {
 
                 // Send message and remove each reminder afterwards
                 bot.send(msg, () => {
-                    Reminder.remove({ _id: reminder.id }, err => {
+                    Reminder.remove({ _id: reminder._id }, err => {
                         if (err !== null) {
                             console.error(err);
                         }
