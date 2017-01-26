@@ -4,7 +4,7 @@ const { witClient } = require('../helpers/witRecognizer');
 const moment = require('moment-timezone');
 const Reminder = require('../models/reminder');
 
-module.exports = [
+exports.newReminder = [
     (session, args, next) => {
         const { reminder, datetime, message } = args;
         const { dialogData, userData } = session;
@@ -20,10 +20,9 @@ module.exports = [
 
         // Cache entities and message
         if (datetime) {
-            const { type, value, from } = datetime.rawEntity;
             // The type is either "value" or "interval".
             // If it's an interval, there are "from" and "to" properties to read a value from.
-            dialogData.datetime = type === 'value' ? value : from.value;
+            dialogData.datetime = extractDatetimeValue(datetime);
         } else {
             dialogData.datetime = null;
         }
@@ -68,7 +67,7 @@ module.exports = [
         } else {
             // Normalize datetime to UTC before saving to MongoDB
             const offset = (rawOffset + dstOffset) / 3600;
-            const method = offset >= 0 ? 'subtract' : 'add';
+            const method = getMomentMethod(userData.timeZoneData);
             expiration = moment(datetime)[method](offset, 'hour').toDate();
         }
 
@@ -91,3 +90,16 @@ module.exports = [
         });
     }
 ];
+
+const extractDatetimeValue = (datetime) => {
+    const { type, value, from } = datetime.rawEntity;
+    return type === 'value' ? value : from.value;  
+};
+
+const getMomentMethod = (timeZoneData) => {
+    const { dstOffset, rawOffset } = timeZoneData;
+    const offset = (rawOffset + dstOffset) / 3600;
+    return offset >= 0 ? 'subtract' : 'add';
+};
+
+exports.helpers = { extractDatetimeValue, getMomentMethod };
