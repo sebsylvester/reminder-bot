@@ -38,6 +38,7 @@ const getRandom = (entity) => {
     }
     return messages ? chance().pickone(messages) : '';
 };
+exports.getRandom = getRandom;
 
 /**
  * Converts a timestamp into a more readable string
