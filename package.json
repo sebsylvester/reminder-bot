@@ -1,6 +1,6 @@
 {
   "name": "reminder-bot",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A clone of the 'Hello Jarvis' Facebook Messenger bot, built with Microsoft Bot Framework and Wit.ai.",
   "main": "lib/app.js",
   "repository": {
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node ./lib/app.js",
+    "build:watch": "babel src --out-dir lib --source-maps --watch",
     "build": "babel src --out-dir lib --source-maps",
     "test": "nyc --reporter=lcov mocha",
     "posttest": "nyc report --reporter=json && codecov -f coverage/*.json",
@@ -27,21 +28,21 @@
   "license": "MIT",
   "dependencies": {
     "@google/maps": "^0.3.0",
-    "botbuilder": "^3.5.3",
-    "botbuilder-wit": "^1.0.4",
+    "botbuilder": "^3.5.4",
+    "botbuilder-wit": "^1.1.1",
     "chance": "^1.0.4",
     "moment-timezone": "^0.5.11",
-    "mongoose": "^4.7.6",
+    "mongoose": "^4.7.8",
     "node-wit": "^4.1.0",
     "restify": "^4.2.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-latest": "^6.16.0",
+    "babel-cli": "^6.22.2",
+    "babel-preset-latest": "^6.22.0",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
     "mocha": "^3.1.2",
-    "nyc": "^10.0.0",
+    "nyc": "^10.1.2",
     "sinon": "^1.17.6"
   }
 }
