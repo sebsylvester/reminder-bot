@@ -3,6 +3,7 @@ const builder = require('botbuilder');
 const mongoose = require('mongoose');
 const consts = require('./helpers/consts');
 const config = require('../config');
+const dialogs = require('./dialogs');
 const createReminderProcessor = require('./helpers/reminderProcessor');
 
 //=========================================================
@@ -50,15 +51,15 @@ bot.beginDialogAction('deleteReminder', '/deleteReminder');
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', require('./dialogs/root'));
-bot.dialog('/firstRun', require('./dialogs/firstRun'));
-bot.dialog('/newReminder', require('./dialogs/newReminder'));
-bot.dialog('/deleteReminder', require('./dialogs/deleteReminder'));
-bot.dialog('/setDatetime', require('./dialogs/setDatetime'));
-bot.dialog('/setTimezone', require('./dialogs/setTimezone'));
-bot.dialog('/showTimezone', require('./dialogs/showTimezone'));
-bot.dialog('/showReminders', require('./dialogs/showReminders'));
-bot.dialog('/help', require('./dialogs/help')).triggerAction({ matches: /^help/i });
+bot.dialog('/', dialogs.root);
+bot.dialog('/firstRun', dialogs.firstRun);
+bot.dialog('/newReminder', dialogs.newReminder);
+bot.dialog('/deleteReminder', dialogs.deleteReminder);
+bot.dialog('/setDatetime', dialogs.setDatetime);
+bot.dialog('/setTimezone', dialogs.setTimezone);
+bot.dialog('/showTimezone', dialogs.showTimezone);
+bot.dialog('/showReminders', dialogs.showReminders);
+bot.dialog('/help', dialogs.help).triggerAction({ matches: /^help/i });
 
 //=========================================================
 // Server Setup
