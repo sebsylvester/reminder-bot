@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
 const consts = require('../src/helpers/consts');
+const { root, setTimezone } = require('../src/dialogs');
 const googleMapsClient = require('../src/api_clients/googleMapsClient');
 const geocodeMock = (params, callback) => {
     // One result for each test
@@ -36,6 +37,9 @@ const geocodeMock = (params, callback) => {
     ];
 
     switch (params.address) {
+        case 'error':
+            callback(new Error('Something failed'));
+            break;
         case 'London':
             callback(null, { json: { results: results[0] }});
             break;
@@ -116,8 +120,8 @@ describe('dialog /setTimezone', function () {
             return Promise.resolve(response);
         });
 
-        bot.dialog('/', require('../src/dialogs/root'));
-        bot.dialog('/setTimezone', require('../src/dialogs/setTimezone'));
+        bot.dialog('/', root);
+        bot.dialog('/setTimezone', setTimezone);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(consts.Prompts.ASK_CITY);
@@ -153,8 +157,8 @@ describe('dialog /setTimezone', function () {
             return Promise.resolve(response);
         });
 
-        bot.dialog('/', require('../src/dialogs/root'));
-        bot.dialog('/setTimezone', require('../src/dialogs/setTimezone'));
+        bot.dialog('/', root);
+        bot.dialog('/setTimezone', setTimezone);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(consts.Prompts.ASK_CITY);
@@ -177,7 +181,7 @@ describe('dialog /setTimezone', function () {
         var step = 0;
 
         bot.dialog('/', builder.DialogAction.beginDialog('/setTimezone'));
-        bot.dialog('/setTimezone', require('../src/dialogs/setTimezone'))
+        bot.dialog('/setTimezone', setTimezone)
             .cancelAction('cancelSetTimezone', consts.Messages.CANCEL_TIMEZONE, { matches: /^(cancel|nevermind)/i });
 
         bot.on('send', function (message) {
@@ -225,7 +229,7 @@ describe('dialog /setTimezone', function () {
         bot.dialog('/', function (session) {
             session.beginDialog('/setTimezone');
         });
-        bot.dialog('/setTimezone', require('../src/dialogs/setTimezone'));
+        bot.dialog('/setTimezone', setTimezone);
         bot.on('send', function (message) {
             switch (++step) {
                 case 1:
@@ -236,6 +240,62 @@ describe('dialog /setTimezone', function () {
                     expect(message.text).to.match(/^Thanks! I have your current time as.+/);
                     expect(message.text).to.match(/Now try something like: /);
                     expect(message.text).to.match(/.+, or type "help"\.$/);
+                    done();
+            }
+        });
+
+        connector.processMessage('start');
+    });
+
+    it('should send an error message if the geocode operation fails', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+        var step = 0;
+
+        bot.dialog('/', function (session) {
+            session.beginDialog('/setTimezone');
+        });
+        bot.dialog('/setTimezone', setTimezone);
+        bot.on('send', function (message) {
+            switch (++step) {
+                case 1:
+                    expect(message.text).to.equal(consts.Prompts.ASK_CITY);
+                    // triggers error response from mock
+                    connector.processMessage('error');
+                    break;
+                case 2:
+                    expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+                    done();
+                    break;
+            }
+        });
+
+        connector.processMessage('start');
+    });
+
+    it('should send an error message if the timezone operation fails', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+        var step = 0;
+
+        // Undo default stub, replace with one that simplifies the test
+        googleMapsClient.timezone.restore();
+        sinon.stub(googleMapsClient, 'timezone', (params, callback) => {
+            callback(new Error('Something failed'));
+        });
+
+        bot.dialog('/', function (session) {
+            session.beginDialog('/setTimezone');
+        });
+        bot.dialog('/setTimezone', setTimezone);
+        bot.on('send', function (message) {
+            switch (++step) {
+                case 1:
+                    expect(message.text).to.equal(consts.Prompts.ASK_CITY);
+                    connector.processMessage('London');
+                    break;
+                case 2:
+                    expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
                     done();
                     break;
             }

@@ -99,4 +99,37 @@ describe('dialog /showReminders', function () {
 
         connector.processMessage('start');
     });
+
+    it('should trigger an error message if the find operation failed', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+        const args = [
+            {
+                id: '5849db6aae51c308988b66d1',
+                value: 'attend meeting',
+                expiration: new Date("2016-12-09T17:00:00Z")
+            },
+            {
+                id: '5849de61b0c00608c266737c',
+                value: 'order pizza',
+                expiration: new Date("2016-12-09T16:30:00Z")
+            }
+        ];
+
+        // Create a stub on the Reminder model
+        sinon.stub(Reminder, 'find', (args, callback) => {
+            callback(new Error('Something failed'));
+        });
+
+        bot.dialog('/', (session) => session.beginDialog('/showReminders', args));
+        bot.dialog('/showReminders', require('../src/dialogs/showReminders'));
+
+        bot.on('send', function (message) {
+            expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+            Reminder.find.restore();
+            done();
+        });
+
+        connector.processMessage('start');
+    });
 });

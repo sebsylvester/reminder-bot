@@ -6,6 +6,8 @@ const utils = require('../src/helpers/utils');
 const consts = require('../src/helpers/consts');
 const { witClient } = require('../src/helpers/witRecognizer');
 const Reminder = require('../src/models/reminder');
+const { newReminder, setTimezone, setDatetime } = require('../src/dialogs');
+const helpers = require('../src/dialogs/newReminder').helpers;
 const timeZoneData = {
     "dstOffset" : 0,
     "rawOffset" : 3600,
@@ -14,7 +16,40 @@ const timeZoneData = {
 };
 
 describe('dialog /newReminder', function () {
-    it('should exit the dialog with an error if the arguments object is empty', function (done) {
+    // test dialog helper functions
+    describe('helper extractDatetimeValue', function () {
+        const extractDatetimeValue = helpers.extractDatetimeValue;
+        it('should return the value property if type is "value"', function () {
+            const datetime = { rawEntity: { type: 'value', value: '2016-11-28T13:27:22.000Z' } }
+            expect(extractDatetimeValue(datetime)).to.equal('2016-11-28T13:27:22.000Z');
+        });
+
+        it('should return the from.value property if type is not "value"', function () {
+            const datetime = { 
+                rawEntity: { 
+                    type: 'interval', 
+                    from: { value: '2016-11-28T13:27:22.000Z' }, 
+                    to: { value: '2016-11-28T13:57:22.000Z' }
+                }
+            }
+            expect(extractDatetimeValue(datetime)).to.equal('2016-11-28T13:27:22.000Z');
+        });
+    });
+
+    describe('helper getMomentMethod', function () {
+        const getMomentMethod = helpers.getMomentMethod;
+        it('should return "add" when the timezone offset is negative', function () {
+            const timeZoneData = { dstOffset: 0, rawOffset: 18000 };
+            expect(getMomentMethod(timeZoneData)).to.equal('subtract');
+        });
+
+        it('should return "subtract" when the timezone offset is positive', function () {
+            const timeZoneData = { dstOffset: 0, rawOffset: -7200 };
+            expect(getMomentMethod(timeZoneData)).to.equal('add');
+        });
+    });
+
+    it('should exit the dialog with an error if the reminder argument is missing', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
@@ -23,7 +58,21 @@ describe('dialog /newReminder', function () {
             done();
         });
         bot.dialog('/', (session) => session.beginDialog('/newReminder', {}));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
+        bot.dialog('/newReminder', newReminder);
+
+        connector.processMessage('start');
+    });
+
+    it('should exit the dialog with an error if the message argument is missing', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+
+        bot.on('error', error => {
+            expect(error.message).to.equal('Invalid arguments object: message property is undefined');
+            done();
+        });
+        bot.dialog('/', (session) => session.beginDialog('/newReminder', { reminder: {} }));
+        bot.dialog('/newReminder', newReminder);
 
         connector.processMessage('start');
     });
@@ -38,8 +87,8 @@ describe('dialog /newReminder', function () {
         };
 
         bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
-        bot.dialog('/setTimezone', require('../src/dialogs/setTimezone'));
+        bot.dialog('/newReminder', newReminder);
+        bot.dialog('/setTimezone', setTimezone);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(consts.Prompts.NEED_TIMEZONE);
@@ -64,8 +113,8 @@ describe('dialog /newReminder', function () {
             }
         });
         bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
-        bot.dialog('/setDatetime', require('../src/dialogs/setDatetime'));
+        bot.dialog('/newReminder', newReminder);
+        bot.dialog('/setDatetime', setDatetime);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(consts.Prompts.ASK_DATETIME.replace(/%s/, 'make coffee'));
@@ -105,7 +154,7 @@ describe('dialog /newReminder', function () {
             }
         });
         bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
+        bot.dialog('/newReminder', newReminder);
 
         connector.processMessage('start');
     });
@@ -139,7 +188,7 @@ describe('dialog /newReminder', function () {
             }
         });
         bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
+        bot.dialog('/newReminder', newReminder);
 
         connector.processMessage('start');
     });
@@ -173,7 +222,7 @@ describe('dialog /newReminder', function () {
             }
         });
         bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
+        bot.dialog('/newReminder', newReminder);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(confirmationMessage);
@@ -228,8 +277,8 @@ describe('dialog /newReminder', function () {
             }
         });
         bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
-        bot.dialog('/newReminder', require('../src/dialogs/newReminder'));
-        bot.dialog('/setDatetime', require('../src/dialogs/setDatetime'));
+        bot.dialog('/newReminder', newReminder);
+        bot.dialog('/setDatetime', setDatetime);
 
         bot.on('send', function (message) {
             switch (++step) {
@@ -248,4 +297,38 @@ describe('dialog /newReminder', function () {
 
         connector.processMessage('start');
     });
+
+    it('should send an error message if the create operation fails', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+        const args = {
+            reminder: { type: 'reminder', entity: 'make coffee' },
+            datetime: { rawEntity: { type: 'value', value: '2016-11-28T15:00:00.000Z'}},
+            message: 'Remind me to make coffee in 30 minutes'
+        };
+
+        // Create a stub on the Reminder model
+        sinon.stub(Reminder, 'create', (reminder, callback) => {
+            callback(new Error('Something failed'));
+        });
+
+        // Avoid a prompt to set a timezone
+        bot.use({
+            botbuilder: function (session, next) {
+                session.userData.timeZoneData = timeZoneData;
+                next();
+            }
+        });
+        bot.dialog('/', (session) => session.beginDialog('/newReminder', args));
+        bot.dialog('/newReminder', newReminder);
+
+        bot.on('send', function (message) {
+            expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+            Reminder.create.restore();
+            done();
+        });
+
+        connector.processMessage('start');
+    });
+    
 });

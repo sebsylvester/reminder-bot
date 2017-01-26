@@ -22,6 +22,14 @@ describe('utils', function () {
         });
     });
 
+    describe('getRandom', function () {
+        const getRandom = utils.getRandom;
+
+        it('should return an empty string for unknown entities', function () {
+            expect(getRandom()).to.equal('');
+        });
+    });
+
     describe('convertTimestamp', function () {
         const { convertTimestamp } = utils;
 
