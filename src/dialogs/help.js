@@ -2,31 +2,31 @@ const builder = require('botbuilder');
 const consts = require('../helpers/consts');
 const helpMenu = consts.Menus.help;
 
-// This dialog will present the buttons as Quick Replies in Facebook Messenger
+// This alternative dialog will present the buttons as Quick Replies in Facebook Messenger
 // https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies
-const dialog = [
-    (session) => {
-        // In case you need Quick Reply buttons
-        builder.Prompts.choice(session,
-            consts.Prompts.HELP,
-            // Extract the titles from the help menu, they will be used as button labels
-            consts.Menus.help.map(el => 'foo'),
-            // Options
-            {
-                listStyle: builder.ListStyle.button,
-                retryPrompt: consts.Prompts.LIST_RETRY
-            }
-        );
-    },
-    (session, results) => {
-        const index = results.response && results.response.index;
-        if (typeof index === 'undefined') {
-            return session.endDialog();
-        }
+// const dialog = [
+//     (session) => {
+//         // In case you need Quick Reply buttons
+//         builder.Prompts.choice(session,
+//             consts.Prompts.HELP,
+//             // Extract the titles from the help menu, they will be used as button labels
+//             consts.Menus.help.map(el => 'foo'),
+//             // Options
+//             {
+//                 listStyle: builder.ListStyle.button,
+//                 retryPrompt: consts.Prompts.LIST_RETRY
+//             }
+//         );
+//     },
+//     (session, results) => {
+//         const index = results.response && results.response.index;
+//         if (typeof index === 'undefined') {
+//             return session.endDialog();
+//         }
 
-        session.beginDialog(helpMenu[index].dialogId);
-    }
-];
+//         session.beginDialog(helpMenu[index].dialogId);
+//     }
+// ];
 
 // This dialog will create a Button Template in Facebook Messenger
 // https://developers.facebook.com/docs/messenger-platform/send-api-reference/button-template
