@@ -57,7 +57,8 @@ module.exports = [
     // Use Geocoding Timezone API
     (session, results) => {
         const geocoding = session.dialogData.geocoding;
-        const index = (results.response && results.response.index) ? results.response.index : 0;
+        const { response } = results;
+        const index = (response && response.hasOwnProperty('index')) ? response.index : 0;
         const location = geocoding[index].geometry.location;
 
         googleMapsClient.timezone({ location }, (err, response) => {
