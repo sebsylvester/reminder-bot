@@ -10,7 +10,7 @@ module.exports = new IntentDialog({ recognizers: [witRecognizer] })
     .matches('show_timezone', DialogAction.beginDialog('/showTimezone'))
     .onDefault((session, args) => {
         const message = session.message.text;
-        const { entities = [] } = args;
+        const { entities } = args;
 
         // Extract all the useful entities.
         const reminder = EntityRecognizer.findEntity(entities, 'reminder');
