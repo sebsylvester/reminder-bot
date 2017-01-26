@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
 const consts = require('../src/helpers/consts');
+const { setDatetime } = require('../src/dialogs');
 
 describe('dialog /setDatetime', function () {
     it('should exit the dialog with an error if the arguments does not contain a reminder', function (done) {
@@ -13,7 +14,7 @@ describe('dialog /setDatetime', function () {
             done();
         });
         bot.dialog('/', (session) => session.beginDialog('/setDatetime', {}));
-        bot.dialog('/setDatetime', require('../src/dialogs/setDatetime'));
+        bot.dialog('/setDatetime', setDatetime);
 
         connector.processMessage('start');
     });
@@ -24,7 +25,7 @@ describe('dialog /setDatetime', function () {
         const reminder = 'make coffee';
 
         bot.dialog('/', (session) => session.beginDialog('/setDatetime', { reminder }));
-        bot.dialog('/setDatetime', require('../src/dialogs/setDatetime'));
+        bot.dialog('/setDatetime', setDatetime);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(consts.Prompts.ASK_DATETIME.replace(/%s/, reminder));
@@ -64,7 +65,7 @@ describe('dialog /setDatetime', function () {
         });
 
         bot.dialog('/', (session) => session.beginDialog('/setDatetime', { reminder }));
-        bot.dialog('/setDatetime', require('../src/dialogs/setDatetime'));
+        bot.dialog('/setDatetime', setDatetime);
 
         bot.on('send', function (message) {
             switch (++step) {
@@ -116,11 +117,40 @@ describe('dialog /setDatetime', function () {
                 done();
             }
         ]);
-        bot.dialog('/setDatetime', require('../src/dialogs/setDatetime'));
+        bot.dialog('/setDatetime', setDatetime);
 
         bot.on('send', function () {
             // Respond to the bot's prompt for a date/time
             connector.processMessage('in 30 minutes');
+        });
+
+        connector.processMessage('start');
+    });
+
+    it('should send an error message if the create operation fails', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+        let step = 0;
+
+        // Replace the message method with a stub that produces an error
+        const { witClient } = require('../src/helpers/witRecognizer');
+        sinon.stub(witClient, 'message', () => Promise.reject(new Error('Something failed')));
+
+        bot.dialog('/', (session) => {
+            session.beginDialog('/setDatetime', { reminder: 'make coffee' });
+        });
+        bot.dialog('/setDatetime', setDatetime);
+
+        bot.on('send', function (message) {
+            switch(++step) {
+                case 1:
+                    connector.processMessage('in 30 minutes');
+                    break;
+                case 2:
+                    expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+                    witClient.message.restore();
+                    done();
+            }
         });
 
         connector.processMessage('start');

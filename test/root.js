@@ -3,6 +3,7 @@ const builder = require('botbuilder');
 const sinon = require('sinon');
 const consts = require('../src/helpers/consts');
 const { witClient } = require('../src/helpers/witRecognizer');
+const { root } = require('../src/dialogs');
 
 describe('dialog /', function () {
     it('should respond to a greeting', function (done) {
@@ -25,7 +26,7 @@ describe('dialog /', function () {
             return Promise.resolve(witResponse);
         });
 
-        bot.dialog('/', require('../src/dialogs/root'));
+        bot.dialog('/', root);
 
         bot.on('send', function (message) {
             expect(message.text).to.match(new RegExp('^(' + consts.Messages.GREETINGS.join('|') + ')'));
@@ -68,7 +69,7 @@ describe('dialog /', function () {
             return Promise.resolve(response);
         });
 
-        bot.dialog('/', require('../src/dialogs/root'));
+        bot.dialog('/', root);
 
         bot.on('send', function (message) {
             expect(message.text).to.match(new RegExp('Oops, I didn\'t get that. Try something like: .+, or type "help"\.'));
@@ -77,5 +78,60 @@ describe('dialog /', function () {
         });
 
         connector.processMessage('What\'s the weather tomorrow?');
+    });
+
+    it('should start the newReminder dialog when triggered by a "remind me to..." message', function (done) {
+        const connector = new builder.ConsoleConnector();
+        const bot = new builder.UniversalBot(connector);
+
+        // Replace the message method with a stub that mocks the response to prevent actual api calls
+        sinon.stub(witClient, 'message', () => {
+            const response = {
+                "msg_id" : "062ca822-a908-4251-9d0e-4d2b2f4d775c",
+                "_text" : "Remind me to fix my code tomorrow at 9am",
+                "entities" : {
+                    "contact" : [ {
+                        "confidence" : 0.8879074482092286,
+                        "type" : "value",
+                        "value" : "me",
+                        "suggested" : true
+                    } ],
+                    "reminder" : [ {
+                        "confidence" : 0.999883972367534,
+                        "type" : "value",
+                        "value" : "fix my code",
+                        "suggested" : true
+                    } ],
+                    "datetime" : [ {
+                        "confidence" : 0.9782094515015287,
+                        "values" : [ {
+                            "value" : "2017-01-27T09:00:00.000Z",
+                            "grain" : "hour",
+                            "type" : "value"
+                        }, {
+                            "value" : "2017-01-27T21:00:00.000Z",
+                            "grain" : "hour",
+                            "type" : "value"
+                        } ],
+                        "value" : "2017-01-27T09:00:00.000Z",
+                        "grain" : "hour",
+                        "type" : "value"
+                    } ]
+                }
+            };
+            return Promise.resolve(response);
+        });
+
+        bot.dialog('/', root);
+        bot.dialog('/newReminder', (session, arguments) => {
+            const { datetime, message, reminder } = arguments;
+            expect(datetime).to.be.ok;
+            expect(reminder).to.be.ok;
+            expect(message).to.equal('Remind me to fix my code tomorrow at 9am');
+            witClient.message.restore();
+            done();
+        });
+
+        connector.processMessage('Remind me to fix my code tomorrow at 9am');
     });
 });

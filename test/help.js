@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
 const consts = require('../src/helpers/consts');
+const { help } = require('../src/dialogs');
 
 describe('dialog /help', function () {
     it('should present a menu containing 3 buttons', function (done) {
@@ -9,7 +10,7 @@ describe('dialog /help', function () {
         const bot = new builder.UniversalBot(connector);
 
         bot.beginDialogAction('help', '/help', { matches: /^help/i });
-        bot.dialog('/help', require('../src/dialogs/help'));
+        bot.dialog('/help', help);
 
         bot.on('send', function (message) {
             expect(message.text).to.equal(consts.Prompts.HELP);
