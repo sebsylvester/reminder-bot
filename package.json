@@ -5,7 +5,7 @@
   "main": "lib/app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sebsylvester/reminder-bot"
+    "url": "https://github.com/sebsylvester/reminder-bot.git"
   },
   "scripts": {
     "start": "node ./lib/app.js",
@@ -26,23 +26,25 @@
   ],
   "author": "Sebastian Sylvester",
   "license": "MIT",
+  "bugs": "https://github.com/sebsylvester/reminder-bot/issues",
+  "homepage": "https://github.com/sebsylvester/reminder-bot",
   "dependencies": {
-    "@google/maps": "^0.3.0",
-    "botbuilder": "^3.5.4",
-    "botbuilder-wit": "^1.1.1",
+    "@google/maps": "^0.3.1",
+    "botbuilder": "^3.6.0",
+    "botbuilder-wit": "^1.1.2",
     "chance": "^1.0.4",
     "moment-timezone": "^0.5.11",
-    "mongoose": "^4.7.8",
-    "node-wit": "^4.1.0",
-    "restify": "^4.2.0"
+    "mongoose": "^4.8.1",
+    "node-wit": "^4.2.0",
+    "restify": "^4.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-preset-latest": "^6.22.0",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
-    "mocha": "^3.1.2",
+    "mocha": "^3.2.0",
     "nyc": "^10.1.2",
-    "sinon": "^1.17.6"
+    "sinon": "^1.17.7"
   }
 }
