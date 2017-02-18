@@ -34,7 +34,7 @@
     "botbuilder-wit": "^1.1.2",
     "chance": "^1.0.4",
     "moment-timezone": "^0.5.11",
-    "mongoose": "^4.8.1",
+    "mongoose": "^4.8.3",
     "node-wit": "^4.2.0",
     "restify": "^4.3.0"
   },
