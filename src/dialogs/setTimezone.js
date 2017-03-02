@@ -7,9 +7,7 @@ const getRandomReminderMessage = require('../helpers/utils').getRandomReminder;
 module.exports = [
     // Prompt user to enter the name of the city they live in
     (session, args) => {
-        const prompt = session.dialogData.prompt =
-            args && args.prompt ? args.prompt : consts.Prompts.ASK_CITY;
-
+        const prompt = args && args.prompt ? args.prompt : consts.Prompts.ASK_CITY;
         builder.Prompts.text(session, prompt);
     },
     // Use Geocoding API to retrieve location coordinates
