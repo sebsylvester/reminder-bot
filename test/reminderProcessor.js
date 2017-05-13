@@ -70,8 +70,13 @@ describe('reminderProcessor', function () {
             expect(reminder._id).to.equal('584bff703dcda8033401f451');
             Reminder.find.restore();
             Reminder.remove.restore();
+            bot.send.restore();
             callback(null, 1);
             done();
+        });
+
+        sinon.stub(bot, 'send', (message, callback) => {
+            callback();
         });
 
         createReminderProcessor(bot)();
@@ -97,8 +102,13 @@ describe('reminderProcessor', function () {
             
             Reminder.find.restore();
             Reminder.remove.restore();
+            bot.send.restore();
             console.error.restore();
             done();
+        });
+
+        sinon.stub(bot, 'send', (message, callback) => {
+            callback();
         });
 
         createReminderProcessor(bot)();
