@@ -18,7 +18,7 @@ describe('dialog /showReminders', function () {
         const bot = new builder.UniversalBot(connector);
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'find', (selector, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, []);
         });
 
@@ -57,7 +57,7 @@ describe('dialog /showReminders', function () {
         ];
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'find', (selector, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, args);
         });
 
@@ -117,7 +117,7 @@ describe('dialog /showReminders', function () {
         ];
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'find', (args, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((args, callback) => {
             callback(new Error('Something failed'));
         });
 

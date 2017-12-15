@@ -27,7 +27,7 @@ describe('dialog /deleteReminder', function () {
         const args = { data: '584adae809122e07c34d2e35' };
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'remove', args => {
+        sinon.stub(Reminder, 'remove').callsFake(args => {
             expect(args._id).to.be.a('string');
             Reminder.remove.restore();
             done();
@@ -45,7 +45,7 @@ describe('dialog /deleteReminder', function () {
         const args = { data: '584adae809122e07c34d2e35' };
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'remove', (args, callback) => {
+        sinon.stub(Reminder, 'remove').callsFake((args, callback) => {
             callback(null, { result: { n: 1 }});
         });
 
@@ -67,7 +67,7 @@ describe('dialog /deleteReminder', function () {
         const args = { data: '584adae809122e07c34d2e35' };
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'remove', (args, callback) => {
+        sinon.stub(Reminder, 'remove').callsFake((args, callback) => {
             callback(null, { result: { n: 0 }});
         });
 
@@ -89,7 +89,7 @@ describe('dialog /deleteReminder', function () {
         const args = { data: '584adae809122e07c34d2e35' };
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'remove', (args, callback) => {
+        sinon.stub(Reminder, 'remove').callsFake((args, callback) => {
             callback(new Error('Something failed'));
         });
 

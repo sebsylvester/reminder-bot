@@ -86,8 +86,8 @@ const timezoneMock = (params, callback) => {
 
 describe('dialog /setTimezone', function () {
     before(function () {
-        sinon.stub(googleMapsClient, 'geocode', geocodeMock);
-        sinon.stub(googleMapsClient, 'timezone', timezoneMock);
+        sinon.stub(googleMapsClient, 'geocode').callsFake(geocodeMock);
+        sinon.stub(googleMapsClient, 'timezone').callsFake(timezoneMock);
     });
 
     after(function () {
@@ -101,7 +101,8 @@ describe('dialog /setTimezone', function () {
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
         const { witClient } = require('../src/helpers/witRecognizer');
-        sinon.stub(witClient, 'message', () => {
+        
+        sinon.stub(witClient, 'message').callsFake(() => {
             const response = {
                 "_text": "Change timezone",
                 "entities": {
@@ -138,7 +139,7 @@ describe('dialog /setTimezone', function () {
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
         const { witClient } = require('../src/helpers/witRecognizer');
-        sinon.stub(witClient, 'message', () => {
+        sinon.stub(witClient, 'message').callsFake(() => {
             const response = {
                 "_text": "Change timezone",
                 "entities": {
@@ -280,7 +281,7 @@ describe('dialog /setTimezone', function () {
 
         // Undo default stub, replace with one that simplifies the test
         googleMapsClient.timezone.restore();
-        sinon.stub(googleMapsClient, 'timezone', (params, callback) => {
+        sinon.stub(googleMapsClient, 'timezone').callsFake((params, callback) => {
             callback(new Error('Something failed'));
         });
 

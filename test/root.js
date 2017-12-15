@@ -11,8 +11,8 @@ describe('dialog /', function () {
         const bot = new builder.UniversalBot(connector);
         const botResponse = new RegExp('^(' + consts.Messages.GREETINGS.join('|') + ') Try something like: .+, or type "help"\.');
 
-        // Replace the message method with a stub that mocks the response to prevent actual api calls
-        sinon.stub(witClient, 'message', () => {
+        // Replace the message method with a stub that mocks the response to prevent actual api calls        
+        sinon.stub(witClient, 'message').callsFake(() => {
             const witResponse = {
                 "_text" : "Hello",
                 "entities" : {
@@ -43,7 +43,7 @@ describe('dialog /', function () {
         const bot = new builder.UniversalBot(connector);
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        sinon.stub(witClient, 'message', () => {
+        sinon.stub(witClient, 'message').callsFake(() => {
             const response = {
                 "_text": "What's the weather tomorrow?",
                 "entities": {
@@ -85,7 +85,7 @@ describe('dialog /', function () {
         const bot = new builder.UniversalBot(connector);
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls
-        sinon.stub(witClient, 'message', () => {
+        sinon.stub(witClient, 'message').callsFake(() => {
             const response = {
                 "msg_id" : "062ca822-a908-4251-9d0e-4d2b2f4d775c",
                 "_text" : "Remind me to fix my code tomorrow at 9am",
