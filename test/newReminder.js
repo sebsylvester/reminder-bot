@@ -138,7 +138,7 @@ describe('dialog /newReminder', function () {
         const normalizedDatetime = '2016-11-28T14:00:00.000Z';
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'create', reminder => {
+        sinon.stub(Reminder, 'create').callsFake(reminder => {
             expect(reminder.user_address).to.be.an('object');
             expect(reminder.value).to.equal(args.reminder.entity);
             expect(reminder.expiration).to.deep.equal(new Date(normalizedDatetime));
@@ -172,7 +172,7 @@ describe('dialog /newReminder', function () {
         };
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'create', reminder => {
+        sinon.stub(Reminder, 'create').callsFake(reminder => {
             expect(reminder.user_address).to.be.an('object');
             expect(reminder.value).to.equal(args.reminder.entity);
             expect(reminder.expiration).to.deep.equal(new Date(args.datetime.rawEntity.value));
@@ -210,7 +210,7 @@ describe('dialog /newReminder', function () {
             .replace(/%s/, utils.convertTimestamp(args.datetime.rawEntity.value, timeZoneData.timeZoneId));
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'create', (reminder, callback) => {
+        sinon.stub(Reminder, 'create').callsFake((reminder, callback) => {
             callback(null);
         });
 
@@ -257,12 +257,12 @@ describe('dialog /newReminder', function () {
         };
 
         // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'create', (reminder, callback) => {
+        sinon.stub(Reminder, 'create').callsFake((reminder, callback) => {
             callback(null);
         });
 
-        // Replace the message method with a stub that mocks the response to prevent actual api calls
-        sinon.stub(witClient, 'message', () => Promise.resolve(witResponse));
+        // Replace the message method with a stub that mocks the response to prevent actual api calls        
+        sinon.stub(witClient, 'message').callsFake(() => Promise.resolve(witResponse));
 
         var confirmationMessage = consts.Messages.CONFIRM_REMINDER
             .replace(/%s/, args.reminder.entity)
@@ -307,8 +307,8 @@ describe('dialog /newReminder', function () {
             message: 'Remind me to make coffee in 30 minutes'
         };
 
-        // Create a stub on the Reminder model
-        sinon.stub(Reminder, 'create', (reminder, callback) => {
+        // Create a stub on the Reminder model        
+        sinon.stub(Reminder, 'create').callsFake((reminder, callback) => {
             callback(new Error('Something failed'));
         });
 

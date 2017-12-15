@@ -15,7 +15,7 @@ describe('reminderProcessor', function () {
 
     it('should trigger the bot to send a notification for expired reminders', function (done) {
         // Create a stub on Reminder.find to pass in the reminders
-        sinon.stub(Reminder, 'find', (selector, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, [{
                 _id: '584bff703dcda8033401f451',
                 user_address: { user: { id: 'user' }},
@@ -25,7 +25,7 @@ describe('reminderProcessor', function () {
         });
 
         // Create a stub on the bot's send method to inspect the message it's going to send
-        sinon.stub(bot, 'send', (message) => {
+        sinon.stub(bot, 'send').callsFake(message => {
             expect(message.constructor.name).to.equal('Message');
             expect(message.data.text).to.equal(consts.Messages.REMINDER.replace(/%s/, 'make more coffee'));
             expect(message.data.address).to.deep.equal({ user: { id: 'user' }});
@@ -40,11 +40,11 @@ describe('reminderProcessor', function () {
 
     it('should log errors triggered by Reminder.find', function (done) {
         // Create a stub on Reminder.find to pass in the reminders
-        sinon.stub(Reminder, 'find', (selector, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(new Error('Someting failed'));
         });
         
-        sinon.stub(console, 'error', (error) => {
+        sinon.stub(console, 'error').callsFake(error => {
             expect(error.message).to.equal('Someting failed');
             
             Reminder.find.restore();
@@ -57,7 +57,7 @@ describe('reminderProcessor', function () {
 
     it('should remove expired reminders', function (done) {
         // Create a stub on Reminder.find to pass in the reminders
-        sinon.stub(Reminder, 'find', (selector, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, [{
                 _id: '584bff703dcda8033401f451',
                 user_address: { user: { id: 'user' }},
@@ -66,7 +66,7 @@ describe('reminderProcessor', function () {
             }]);
         });
 
-        sinon.stub(Reminder, 'remove', (reminder, callback) => {
+        sinon.stub(Reminder, 'remove').callsFake((reminder, callback) => {
             expect(reminder._id).to.equal('584bff703dcda8033401f451');
             Reminder.find.restore();
             Reminder.remove.restore();
@@ -75,7 +75,7 @@ describe('reminderProcessor', function () {
             done();
         });
 
-        sinon.stub(bot, 'send', (message, callback) => {
+        sinon.stub(bot, 'send').callsFake((message, callback) => {
             callback();
         });
 
@@ -84,7 +84,7 @@ describe('reminderProcessor', function () {
 
     it('should log errors triggered by Reminder.remove', function (done) {
         // Create a stub on Reminder.find to pass in the reminders
-        sinon.stub(Reminder, 'find', (selector, callback) => {
+        sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, [{
                 _id: '584bff703dcda8033401f451',
                 user_address: { user: { id: 'user' }},
@@ -93,11 +93,11 @@ describe('reminderProcessor', function () {
             }]);
         });
 
-        sinon.stub(Reminder, 'remove', (reminder, callback) => {     
+        sinon.stub(Reminder, 'remove').callsFake((reminder, callback) => {
             callback(new Error('Someting failed'));
         });
 
-        sinon.stub(console, 'error', (error) => {
+        sinon.stub(console, 'error').callsFake(error => {
             expect(error.message).to.equal('Someting failed');
             
             Reminder.find.restore();
@@ -107,7 +107,7 @@ describe('reminderProcessor', function () {
             done();
         });
 
-        sinon.stub(bot, 'send', (message, callback) => {
+        sinon.stub(bot, 'send').callsFake((message, callback) => {
             callback();
         });
 
