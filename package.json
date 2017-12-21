@@ -1,6 +1,6 @@
 {
   "name": "reminder-bot",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A clone of the 'Hello Jarvis' Facebook Messenger bot, built with Microsoft Bot Framework and Wit.ai.",
   "main": "lib/app.js",
   "repository": {
