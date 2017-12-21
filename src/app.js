@@ -14,7 +14,7 @@ mongoose.connect(process.env.MONGO_URI || config.MONGO_URI, err => {
     if (err) {
         return console.error(err);
     }
-    console.log("Connected to MongoDB");
+    console.log('Connected to MongoDB');
 });
 
 //=========================================================
@@ -27,6 +27,8 @@ const connector = new builder.ChatConnector({
     appPassword: process.env.MICROSOFT_APP_PASSWORD || config.MICROSOFT_APP_PASSWORD
 });
 const bot = new builder.UniversalBot(connector);
+// Register in-memory storage
+bot.set('storage', new builder.MemoryBotStorage());
 
 //=========================================================
 // Bots Middleware
