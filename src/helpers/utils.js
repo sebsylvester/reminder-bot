@@ -33,8 +33,6 @@ const getRandom = (entity) => {
         case 'greeting':
             messages = consts.Messages.GREETINGS;
             break;
-        default:
-            console.log('Unknown entity %s', entity);
     }
     return messages ? chance().pickone(messages) : '';
 };
