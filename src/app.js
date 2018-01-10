@@ -10,7 +10,8 @@ const createReminderProcessor = require('./helpers/reminderProcessor');
 // MongoDB Setup
 //=========================================================
 
-mongoose.connect(process.env.MONGO_URI || config.MONGO_URI, err => {
+const MONGO_URI = process.env.MONGO_URI || config.MONGO_URI; 
+mongoose.connect(MONGO_URI, { useMongoClient: true }, err => {
     if (err) {
         return console.error(err);
     }
