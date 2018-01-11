@@ -46,25 +46,7 @@ describe('dialog /', function () {
         sinon.stub(witClient, 'message').callsFake(() => {
             const response = {
                 "_text": "What's the weather tomorrow?",
-                "entities": {
-                    "reminder": [{
-                        "confidence": 0.994554597770477,
-                        "type": "value",
-                        "value": "What's the weather",
-                        "suggested": true
-                    }],
-                    "datetime": [{
-                        "confidence": 0.9976394228258594,
-                        "type": "value",
-                        "value": "2016-12-07T00:00:00.000Z",
-                        "grain": "day",
-                        "values": [{
-                            "type": "value",
-                            "value": "2016-12-07T00:00:00.000Z",
-                            "grain": "day"
-                        }]
-                    }]
-                }
+                "entities": {}
             };
             return Promise.resolve(response);
         });

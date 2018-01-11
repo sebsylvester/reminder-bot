@@ -311,6 +311,7 @@ describe('dialog /newReminder', function () {
         sinon.stub(Reminder, 'create').callsFake((reminder, callback) => {
             callback(new Error('Something failed'));
         });
+        sinon.stub(console, "error").callsFake((error) => { });
 
         // Avoid a prompt to set a timezone
         bot.use({
@@ -323,9 +324,14 @@ describe('dialog /newReminder', function () {
         bot.dialog('/newReminder', newReminder);
 
         bot.on('send', function (message) {
-            expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
-            Reminder.create.restore();
-            done();
+            if (message.type === 'message') {
+                expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+            }
+            if (message.type === 'endOfConversation') {
+                Reminder.create.restore();
+                (console.error).restore();
+                done();
+            }
         });
 
         connector.processMessage('start');

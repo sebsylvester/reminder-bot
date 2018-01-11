@@ -60,6 +60,7 @@ describe('dialog /showReminders', function () {
         sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, args);
         });
+        sinon.stub(console, "error").callsFake((error) => { });
 
         bot.use({
             botbuilder: function (session, next) {
@@ -94,6 +95,7 @@ describe('dialog /showReminders', function () {
             });
 
             Reminder.find.restore();
+            (console.error).restore();
             done();
         });
 
@@ -120,14 +122,20 @@ describe('dialog /showReminders', function () {
         sinon.stub(Reminder, 'find').callsFake((args, callback) => {
             callback(new Error('Something failed'));
         });
+        sinon.stub(console, "error").callsFake((error) => { });
 
         bot.dialog('/', (session) => session.beginDialog('/showReminders', args));
         bot.dialog('/showReminders', require('../src/dialogs/showReminders'));
 
         bot.on('send', function (message) {
-            expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
-            Reminder.find.restore();
-            done();
+            if (message.type === 'message') {
+                expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+            }
+            if (message.type === 'endOfConversation') {
+                Reminder.find.restore();
+                (console.error).restore();
+                done();
+            }
         });
 
         connector.processMessage('start');
