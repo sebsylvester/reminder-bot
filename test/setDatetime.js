@@ -135,6 +135,7 @@ describe('dialog /setDatetime', function () {
         // Replace the message method with a stub that produces an error
         const { witClient } = require('../src/helpers/witRecognizer');
         sinon.stub(witClient, 'message').callsFake(() => Promise.reject(new Error('Something failed')));
+        sinon.stub(console, "error").callsFake((error) => { });
 
         bot.dialog('/', (session) => {
             session.beginDialog('/setDatetime', { reminder: 'make coffee' });
@@ -148,7 +149,10 @@ describe('dialog /setDatetime', function () {
                     break;
                 case 2:
                     expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+                    break;
+                case 3:
                     witClient.message.restore();
+                    (console.error).restore();
                     done();
             }
         });

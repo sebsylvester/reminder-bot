@@ -252,6 +252,8 @@ describe('dialog /setTimezone', function () {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
         var step = 0;
+        
+        sinon.stub(console, "error").callsFake((error) => { });
 
         bot.dialog('/', function (session) {
             session.beginDialog('/setTimezone');
@@ -266,6 +268,9 @@ describe('dialog /setTimezone', function () {
                     break;
                 case 2:
                     expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+                    break;
+                case 3:
+                    (console.error).restore();
                     done();
                     break;
             }
@@ -278,6 +283,8 @@ describe('dialog /setTimezone', function () {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
         var step = 0;
+
+        sinon.stub(console, "error").callsFake((error) => { });
 
         // Undo default stub, replace with one that simplifies the test
         googleMapsClient.timezone.restore();
@@ -297,6 +304,9 @@ describe('dialog /setTimezone', function () {
                     break;
                 case 2:
                     expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+                    break;
+                case 3:
+                    (console.error).restore();
                     done();
                     break;
             }

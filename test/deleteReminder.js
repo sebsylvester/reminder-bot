@@ -92,14 +92,20 @@ describe('dialog /deleteReminder', function () {
         sinon.stub(Reminder, 'remove').callsFake((args, callback) => {
             callback(new Error('Something failed'));
         });
+        sinon.stub(console, "error").callsFake((error) => { });
 
         bot.dialog('/', (session) => session.beginDialog('/deleteReminder', args));
         bot.dialog('/deleteReminder', deleteReminder);
 
         bot.on('send', function (message) {
-            expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
-            Reminder.remove.restore();
-            done();
+            if (message.type === 'message') {
+                expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
+            }
+            if (message.type === 'endOfConversation') {
+                Reminder.remove.restore();
+                (console.error).restore();
+                done();
+            }
         });
 
         connector.processMessage('start');
