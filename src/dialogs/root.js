@@ -19,11 +19,15 @@ module.exports = new IntentDialog({ recognizers: [witRecognizer] })
 
         // The user wants to set a new reminder.
         // If datetime is undefined, the bot will prompt the user to choose one.
-        if (reminder && message.match(/remind me/i))
+        if (reminder) {
             session.beginDialog('/newReminder', { reminder, datetime, message });
+        }            
         // If the user just sends a greeting, send a greeting back and show an example of how to set a reminder.
-        else if (greeting && !reminder && !datetime)
+        else if (greeting && !reminder && !datetime) {
             session.endDialog(consts.Messages.GREETING_RESPONSE, utils.getRandomGreeting(), utils.getRandomReminder());
+        }            
         // Send a default response
-        else session.endDialog(consts.Messages.DEFAULT_RESPONSE, utils.getRandomReminder());
+        else {
+            session.endDialog(consts.Messages.DEFAULT_RESPONSE, utils.getRandomReminder());
+        }
     });
