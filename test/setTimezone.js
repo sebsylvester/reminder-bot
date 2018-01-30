@@ -253,7 +253,7 @@ describe('dialog /setTimezone', function () {
         const bot = new builder.UniversalBot(connector);
         var step = 0;
         
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => { });
 
         bot.dialog('/', function (session) {
             session.beginDialog('/setTimezone');
@@ -284,7 +284,7 @@ describe('dialog /setTimezone', function () {
         const bot = new builder.UniversalBot(connector);
         var step = 0;
 
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => { });
 
         // Undo default stub, replace with one that simplifies the test
         googleMapsClient.timezone.restore();

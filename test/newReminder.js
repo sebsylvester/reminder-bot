@@ -1,7 +1,6 @@
 const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
-const moment = require('moment-timezone');
 const utils = require('../src/helpers/utils');
 const consts = require('../src/helpers/consts');
 const { witClient } = require('../src/helpers/witRecognizer');
@@ -283,11 +282,11 @@ describe('dialog /newReminder', function () {
         bot.on('send', function (message) {
             switch (++step) {
                 case 1:
-                    //expect(message.text).to.equal(consts.Prompts.ASK_DATETIME.replace(/%s/, 'make coffee'));
+                    expect(message.text).to.equal(consts.Prompts.ASK_DATETIME.replace(/%s/, 'make coffee'));
                     connector.processMessage('3pm');
                     break;
                 case 2:
-                    //expect(message.text).to.equal(confirmationMessage);
+                    expect(message.text).to.equal(confirmationMessage);
                     witClient.message.restore();
                     Reminder.create.restore();
                     done();
@@ -311,7 +310,7 @@ describe('dialog /newReminder', function () {
         sinon.stub(Reminder, 'create').callsFake((reminder, callback) => {
             callback(new Error('Something failed'));
         });
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => { });
 
         // Avoid a prompt to set a timezone
         bot.use({

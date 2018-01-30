@@ -1,9 +1,7 @@
 const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
-const consts = require('../src/helpers/consts');
 const utils = require('../src/helpers/utils');
-const helpMenu = consts.Menus.help;
 const Reminder = require('../src/models/reminder');
 const timeZoneData = {
     "dstOffset" : 0,
@@ -60,7 +58,7 @@ describe('dialog /showReminders', function () {
         sinon.stub(Reminder, 'find').callsFake((selector, callback) => {
             callback(null, args);
         });
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => { });
 
         bot.use({
             botbuilder: function (session, next) {
@@ -122,7 +120,7 @@ describe('dialog /showReminders', function () {
         sinon.stub(Reminder, 'find').callsFake((args, callback) => {
             callback(new Error('Something failed'));
         });
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => { });
 
         bot.dialog('/', (session) => session.beginDialog('/showReminders', args));
         bot.dialog('/showReminders', require('../src/dialogs/showReminders'));
