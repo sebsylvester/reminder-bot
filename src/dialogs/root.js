@@ -1,6 +1,5 @@
 const { IntentDialog, DialogAction, EntityRecognizer } = require('botbuilder');
 const consts = require('../helpers/consts');
-const config = require('../../config');
 const utils = require('../helpers/utils');
 const { witRecognizer } = require('../helpers/witRecognizer');
 

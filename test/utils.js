@@ -8,7 +8,6 @@ describe('utils', function () {
         const allReminders = consts.Messages.EXAMPLE_REMINDERS;
 
         it('should return an example reminder', function () {
-            var res = allReminders.find(el => el === reminder);
             expect(allReminders.find(el => el === reminder)).to.be.a('string');
         });
     });

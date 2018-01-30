@@ -1,13 +1,12 @@
 const expect = require('chai').expect;
 const builder = require('botbuilder');
 const sinon = require('sinon');
-const utils = require('../src/helpers/utils');
 const consts = require('../src/helpers/consts');
 const Reminder = require('../src/models/reminder');
 const { deleteReminder } = require('../src/dialogs');
 
-describe('dialog /deleteReminder', function () {
-    it('should exit the dialog with an error if the arguments object is empty', function (done) {
+describe('dialog /deleteReminder', () => {
+    it('should exit the dialog with an error if the arguments object is empty', (done) => {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
 
@@ -21,7 +20,7 @@ describe('dialog /deleteReminder', function () {
         connector.processMessage('start');
     });
 
-    it('should call Reminder.remove to remove a reminder from MongoDB', function (done) {
+    it('should call Reminder.remove to remove a reminder from MongoDB', (done) => {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
         const args = { data: '584adae809122e07c34d2e35' };
@@ -39,7 +38,7 @@ describe('dialog /deleteReminder', function () {
         connector.processMessage('start');
     });
 
-    it('should respond with a message after successfully deleting the reminder', function (done) {
+    it('should respond with a message after successfully deleting the reminder', (done) => {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
         const args = { data: '584adae809122e07c34d2e35' };
@@ -52,7 +51,7 @@ describe('dialog /deleteReminder', function () {
         bot.dialog('/', (session) => session.beginDialog('/deleteReminder', args));
         bot.dialog('/deleteReminder', deleteReminder);
 
-        bot.on('send', function (message) {
+        bot.on('send', (message) => {
             expect(message.text).to.equal(consts.Messages.REMINDER_DELETED);
             Reminder.remove.restore();
             done();
@@ -61,7 +60,7 @@ describe('dialog /deleteReminder', function () {
         connector.processMessage('start');
     });
 
-    it('should respond with a message if the reminder had already been deleted', function (done) {
+    it('should respond with a message if the reminder had already been deleted', (done) => {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
         const args = { data: '584adae809122e07c34d2e35' };
@@ -74,7 +73,7 @@ describe('dialog /deleteReminder', function () {
         bot.dialog('/', (session) => session.beginDialog('/deleteReminder', args));
         bot.dialog('/deleteReminder', deleteReminder);
 
-        bot.on('send', function (message) {
+        bot.on('send', (message) => {
             expect(message.text).to.equal(consts.Messages.REMINDER_ALREADY_DELETED);
             Reminder.remove.restore();
             done();
@@ -83,7 +82,7 @@ describe('dialog /deleteReminder', function () {
         connector.processMessage('start');
     });
 
-    it('should trigger an error message if the remove operation failed', function (done) {
+    it('should trigger an error message if the remove operation failed', (done) => {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
         const args = { data: '584adae809122e07c34d2e35' };
@@ -92,12 +91,12 @@ describe('dialog /deleteReminder', function () {
         sinon.stub(Reminder, 'remove').callsFake((args, callback) => {
             callback(new Error('Something failed'));
         });
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => null);
 
         bot.dialog('/', (session) => session.beginDialog('/deleteReminder', args));
         bot.dialog('/deleteReminder', deleteReminder);
 
-        bot.on('send', function (message) {
+        bot.on('send', (message) => {
             if (message.type === 'message') {
                 expect(message.text).to.equal('Oops. Something went wrong and we need to start over.');
             }

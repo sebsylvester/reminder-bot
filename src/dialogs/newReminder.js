@@ -1,6 +1,5 @@
 const consts = require('../helpers/consts');
 const utils = require('../helpers/utils');
-const { witClient } = require('../helpers/witRecognizer');
 const moment = require('moment-timezone');
 const Reminder = require('../models/reminder');
 

@@ -135,7 +135,7 @@ describe('dialog /setDatetime', function () {
         // Replace the message method with a stub that produces an error
         const { witClient } = require('../src/helpers/witRecognizer');
         sinon.stub(witClient, 'message').callsFake(() => Promise.reject(new Error('Something failed')));
-        sinon.stub(console, "error").callsFake((error) => { });
+        sinon.stub(console, "error").callsFake(() => { });
 
         bot.dialog('/', (session) => {
             session.beginDialog('/setDatetime', { reminder: 'make coffee' });

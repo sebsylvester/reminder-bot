@@ -1,7 +1,6 @@
 const builder = require('botbuilder');
 const consts = require('../helpers/consts');
-const helpMenu = consts.Menus.help;
-
+// const helpMenu = consts.Menus.help;
 // This alternative dialog will present the buttons as Quick Replies in Facebook Messenger
 // https://developers.facebook.com/docs/messenger-platform/send-api-reference/quick-replies
 // const dialog = [

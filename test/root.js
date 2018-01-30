@@ -9,7 +9,6 @@ describe('dialog /', function () {
     it('should respond to a greeting', function (done) {
         const connector = new builder.ConsoleConnector();
         const bot = new builder.UniversalBot(connector);
-        const botResponse = new RegExp('^(' + consts.Messages.GREETINGS.join('|') + ') Try something like: .+, or type "help"\.');
 
         // Replace the message method with a stub that mocks the response to prevent actual api calls        
         sinon.stub(witClient, 'message').callsFake(() => {
@@ -54,7 +53,7 @@ describe('dialog /', function () {
         bot.dialog('/', root);
 
         bot.on('send', function (message) {
-            expect(message.text).to.match(new RegExp('Oops, I didn\'t get that. Try something like: .+, or type "help"\.'));
+            expect(message.text).to.match(new RegExp('Oops, I didn\'t get that. Try something like: .+, or type "help"'));
             witClient.message.restore();
             done();
         });
