@@ -3,7 +3,7 @@
 This is a clone of the [Hello Jarvis](https://facebook.com/helloimjarvis/) Facebook Messenger bot, built with the [Microsoft Bot Framework](https://dev.botframework.com/) and [Wit.ai](https://wit.ai) for language processing. It has the exact same functionality and it required just 600 lines of code to implement.
 
 [![Build Status](https://travis-ci.org/sebsylvester/reminder-bot.svg?branch=master)](https://travis-ci.org/sebsylvester/reminder-bot)
-[![codecov](https://codecov.io/gh/sebsylvester/reminder-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/sebsylvester/reminder-bot)
+[![codecov](https://codecov.io/gh/sebsylvester/reminder-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/sebsylvester/reminder-bot) [![Greenkeeper badge](https://badges.greenkeeper.io/sebsylvester/reminder-bot.svg)](https://greenkeeper.io/)
 
 ## Prerequisites
 * Get a [Google Maps](https://developers.google.com/maps/web-services/) api key and activate the Geocoding and Time Zone API's in the [Google API Console](https://console.cloud.google.com/).
